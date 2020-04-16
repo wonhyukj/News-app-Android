@@ -17,8 +17,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
@@ -33,7 +33,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,44 +40,24 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
-    BottomNavigationView bottomNavigation;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private List<String> list;
-    //    private RecyclerAdapter adapter;
-    LocationManager locationManager;
-    String provider;
-    List<News> news;
-    List<Weather> weathers;
-    List<Object> combines;
-    private static String JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_Home";
-    private String WEATHER_URL;
-    private String cityName;
-    private String stateName;
+    private LocationManager locationManager;
+    private double previousLat = 0.0;
+    private double previousLng = 0.0;
+    private String provider;
+    private List<Object> combines;
+    private HomeAdapter homeAdapter;
 
-    Adapter adapter;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(this)
-                        .setTitle("Title")
-                        .setMessage("Location Permission")
+    public void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(this).setTitle("Title").setMessage("Location Permission")
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -87,47 +66,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             }
-                        })
-                        .create()
-                        .show();
-
-
+                        }).create().show();
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
-            return false;
-        } else {
-            return true;
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        //Request location updates:
-                        locationManager.requestLocationUpdates(provider, 400, 1, this);
-                    }
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestLocationUpdates(provider, 400, 1, this);
                 }
-                return;
             }
         }
     }
@@ -137,29 +92,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
         recyclerView = findViewById(R.id.recycler_view);
-        news = new ArrayList<>();
-        weathers = new ArrayList<>();
         combines = new ArrayList<>();
         extractNews();
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        list = Arrays.asList(getResources().getStringArray(R.array.android_versions));
-//        adapter = new RecyclerAdapter(list);
-//        recyclerView.setAdapter(adapter);
-
         checkLocationPermission();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
     }
@@ -167,11 +111,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onPause() {
         super.onPause();
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            locationManager.removeUpdates((LocationListener) this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.removeUpdates(this);
         }
     }
 
@@ -193,56 +134,42 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     }
                 }
         );
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         ComponentName componentName = new ComponentName(getApplicationContext(), SearchResultsActivity.class);
         Log.i("SearchView", String.valueOf(searchView));
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(componentName));
-
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
         return true;
     }
 
+
     @Override
     public void onLocationChanged(Location location) {
-
-        Double lat = location.getLatitude();
-        Double lng = location.getLongitude();
-
-        Log.i("Location info: Lat", lat.toString());
-        Log.i("Location info: Lng", lng.toString());
-
-        try {
-            Geocoder geocoder = new Geocoder(this.getApplicationContext(), Locale.getDefault());
-
-            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-
-            Log.i("Addresses", addresses.toString());
-            cityName = addresses.get(0).getLocality();
-            stateName = addresses.get(0).getAdminArea();
-            String[] cityArr = cityName.split(" ");
-            String cityNameURL = "";
-            for (int i = 0; i < cityArr.length; i++) {
-                if (i != cityArr.length - 1) {
-                    cityNameURL += cityArr[i];
-                    cityNameURL += "%20";
-                } else {
-                    cityNameURL += cityArr[i];
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        if (getPreviousLat() != lat || getPreviousLng() != lng) {
+            setPreviousLat(lat);
+            setPreviousLng(lng);
+            try {
+                Geocoder geocoder = new Geocoder(this.getApplicationContext(), Locale.getDefault());
+                List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+                Log.i("Addresses", addresses.toString());
+                String cityName = addresses.get(0).getLocality();
+                String stateName = addresses.get(0).getAdminArea();
+                String[] cityArr = cityName.split(" ");
+                StringBuilder cityNameURL = new StringBuilder();
+                for (int i = 0; i < cityArr.length; i++) {
+                    if (i != cityArr.length - 1) {
+                        cityNameURL.append(cityArr[i]);
+                        cityNameURL.append("%20");
+                    } else {
+                        cityNameURL.append(cityArr[i]);
+                    }
                 }
+                extractWeather(cityName, stateName, cityNameURL);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityNameURL + "&units=metric&appid=a2746082d6cfc8e4df2d8d352d2aa389";
-            extractWeather();
-            Log.i("URL", WEATHER_URL);
-            Log.i("City Name", cityName);
-            Log.i("State Name", stateName);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -260,107 +187,63 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     }
 
-    public void getLocation(View view) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(provider);
-
-        onLocationChanged(location);
-
-
-    }
-
-    private void extractWeather() {
+    private void extractWeather(final String cityName, final String stateName, StringBuilder cityNameURL) {
+        String URL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityNameURL + "&units=metric&appid=a2746082d6cfc8e4df2d8d352d2aa389";
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, WEATHER_URL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                JSONArray jsonArray = null;
                 Log.i("RESPONSE WEATHER: ", response.toString());
                 try {
-                    jsonArray = response.getJSONArray("weather");
-
-                    Weather weather = new Weather();
-
-                    JSONObject weatherObject = jsonArray.getJSONObject(0);
-
-                    weather.setCity(cityName);
-                    weather.setState(stateName);
-                    weather.setWeather(weatherObject.getString("main").toString());
-
-                    JSONObject tempObject = response.getJSONObject("main");
-                    weather.setTemperature(Double.toString(tempObject.getDouble("temp")));
-
-                    weathers.add(weather);
-
+                    JSONArray jsonArray = response.getJSONArray("weather");
+                    String temperature = Integer.toString(response.getJSONObject("main").getInt("temp"));
+                    String weatherStr = jsonArray.getJSONObject(0).getString("main");
+                    Weather weather = new Weather(cityName, stateName, weatherStr, temperature);
                     combines.add(weather);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("tag", "onErrorResponse: " + error.getMessage());
             }
         });
-
         queue.add(jsonObjectRequest);
-
     }
 
     private void extractNews() {
         RequestQueue queue = Volley.newRequestQueue(this);
+        String JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_Home";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSON_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
-                JSONArray jsonArray = null;
                 try {
-                    jsonArray = response.getJSONArray("temp");
+                    JSONArray jsonArray = response.getJSONArray("temp");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         try {
                             JSONObject newsObject = jsonArray.getJSONObject(i);
                             Log.i("JSON OBJ ", newsObject.toString());
-
                             News newObj = new News();
-                            newObj.setId(newsObject.getString("id").toString());
-                            newObj.setTitle(newsObject.getString("webTitle").toString());
+                            newObj.setId(newsObject.getString("id"));
+                            newObj.setTitle(newsObject.getString("webTitle"));
                             newObj.setTime(newsObject.getString("webPublicationDate"));
                             newObj.setSection(newsObject.getString("section"));
                             newObj.setWebURL(newsObject.getString("webUrl"));
                             newObj.setImg(newsObject.getString("bigUrl"));
-
-                            news.add(newObj);
-
+                            combines.add(newObj);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-                for (int i = 0; i < news.size(); i++) {
-                    combines.add(news.get(i));
-                }
-
-                adapter = new Adapter(getApplicationContext(), combines);
-                recyclerView.setAdapter(adapter);
+                LinearLayoutManager linearManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(linearManager);
+                homeAdapter = new HomeAdapter(getApplicationContext(), combines);
+                recyclerView.setAdapter(homeAdapter);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -373,4 +256,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     }
 
+    public double getPreviousLat() {
+        return previousLat;
+    }
+
+    public void setPreviousLat(double previousLat) {
+        this.previousLat = previousLat;
+    }
+
+    public double getPreviousLng() {
+        return previousLng;
+    }
+
+    public void setPreviousLng(double previousLng) {
+        this.previousLng = previousLng;
+    }
 }

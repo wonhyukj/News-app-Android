@@ -1,15 +1,15 @@
 [
     {
-        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_search_black_24dp.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\ic_search_black_24dp.xml"
     },
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_text_view_layout.xml.flat",
         "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\text_view_layout.xml"
     },
     {
-        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_search_black_24dp.xml.flat",
-        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\ic_search_black_24dp.xml"
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
     },
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\menu_my_menu.xml.flat",

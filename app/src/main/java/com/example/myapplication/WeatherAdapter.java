@@ -22,23 +22,14 @@ import java.util.List;
 //    implementation 'com.android.support:recyclerview-v7:28.0.0'
 
 public class WeatherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    LayoutInflater inflater;
-    List<Weather> weathers;
-//    List<Object> combine;
+    private LayoutInflater inflater;
+    private List<Weather> weathers;
     private static int TYPE_WEATHER = 1;
     private static int TYPE_NEWS = 2;
 
     public WeatherAdapter(Context ctx, List<Weather> weathers){
         this.inflater = LayoutInflater.from(ctx);
         this.weathers = weathers;
-//
-//        for(int i = 0; i < weathers.size(); i++) {
-//            this.combine.add(this.weathers.get(i));
-//        }
-//
-//        for(int i = 0; i < news.size(); i++) {
-//            this.combine.add(this.news.get(i));
-//        }
     }
 
 //    @Override
@@ -92,39 +83,10 @@ public class WeatherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } else {
                 weatherViewHolder.cardview.setBackgroundResource(R.drawable.sunny_weather);
             }
-//        }
-//
-//
-//        else {
-//        ViewHolder holders = (ViewHolder) holder;
-//
-//        holders.newsTitle.setText(news.get(position).getTitle());
-//        holders.newsSource.setText(news.get(position).getSection());
-//        holders.newsDate.setText(news.get(position).getTime());
-//        Picasso.get().load(news.get(position).getImg()).fit().into(holders.newsImage);
-//        File f = new File("/Users/wonhyukjang/Desktop/AndroidStudio Project/MyApplication/app/src/main/res/drawable/bookmark.png");
-//        Picasso.get().load(f).fit().into(holder.newsBookmark);
-//        Picasso.get().load(news.get(position).getImg()).fit().into(holders.newsBookmark);
-
     }
-//    }
-
-//    @Override
-//    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        // bind the data
-//        holder.newsTitle.setText(news.get(position).getTitle());
-//        holder.newsSource.setText(news.get(position).getSection());
-//        holder.newsDate.setText(news.get(position).getTime());
-//        Picasso.get().load(news.get(position).getImg()).fit().into(holder.newsImage);
-//        File f = new File("/Users/wonhyukjang/Desktop/AndroidStudio Project/MyApplication/app/src/main/res/drawable/bookmark.png");
-////        Picasso.get().load(f).fit().into(holder.newsBookmark);
-//        Picasso.get().load(news.get(position).getImg()).fit().into(holder.newsBookmark);
-//
-//    }
 
     @Override
     public int getItemCount() {
-//        return this.combine.size();
         return this.weathers.size();
     }
 

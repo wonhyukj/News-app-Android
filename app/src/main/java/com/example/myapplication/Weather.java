@@ -9,11 +9,7 @@ public class Weather {
     private String weather;
     private String temperature;
 
-    public  Weather(){
-
-    }
-
-    public Weather(String state, String city, String weather , String temperature){
+    public Weather(String state, String city, String weather, String temperature) {
         this.state = state;
         this.city = city;
         this.weather = weather;

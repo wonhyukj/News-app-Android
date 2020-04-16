@@ -938,6 +938,7 @@ color test_mtrl_calendar_day
 color test_mtrl_calendar_day_selected
 color tooltip_background_dark
 color tooltip_background_light
+color white
 dimen abc_action_bar_content_inset_material
 dimen abc_action_bar_content_inset_with_nav
 dimen abc_action_bar_default_height_material
@@ -1515,6 +1516,7 @@ id bottom_navigation
 id buttonPanel
 id cancel_button
 id cardView
+id cardViewLayout
 id center
 id center_horizontal
 id center_vertical
