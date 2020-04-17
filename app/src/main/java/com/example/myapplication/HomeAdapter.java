@@ -124,7 +124,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holders.newsURL.setText(news.getWebURL());
             holders.newsID.setText(news.getId());
             Picasso.get().load(news.getImg()).fit().into(holders.newsImage);
-            Picasso.get().load(news.getImg()).fit().into(holders.newsBookmark);
         }
     }
 

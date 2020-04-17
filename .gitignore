@@ -1,6 +1,7 @@
 # Built application files
 /*/build/
-
+/app/build
+gradle/
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
 
@@ -35,3 +36,5 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+/app/build/
+/.gradle/
