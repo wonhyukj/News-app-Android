@@ -43,6 +43,7 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         detailArticles = new ArrayList<>();
+
         Bundle bundle = getIntent().getExtras();
         // Show Back button
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
