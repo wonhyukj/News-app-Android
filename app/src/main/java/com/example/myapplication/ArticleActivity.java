@@ -68,6 +68,8 @@ public class ArticleActivity extends AppCompatActivity {
 
         if (bundle.getString("url") != null) {
             queryURL = JSON_URL + bundle.getString("url");
+            Log.i("Link: ", queryURL);
+
 
             Toast.makeText(this, queryURL, Toast.LENGTH_SHORT).show();
         }
