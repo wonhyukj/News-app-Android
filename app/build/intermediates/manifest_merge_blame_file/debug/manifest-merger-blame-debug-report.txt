@@ -24,7 +24,7 @@
 14-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:8:22-76
 15
 16    <application
-16-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:10:5-34:19
+16-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:10:5-39:19
 17        android:allowBackup="true"
 17-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:11:9-35
 18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -42,49 +42,52 @@
 25        android:testOnly="true"
 26        android:theme="@style/AppTheme" >
 26-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:16:9-40
-27        <activity
-27-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:17:9-25:20
-28            android:name="com.example.myapplication.SearchResultsActivity"
-28-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:17:19-56
-29            android:launchMode="singleTop" >
-29-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:17:57-87
-30            <intent-filter>
-30-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:18:13-20:29
-31                <action android:name="android.intent.action.SEARCH" />
-31-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:19:17-71
-31-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:19:25-68
-32            </intent-filter>
-33
-34            <meta-data
-34-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:21:13-23:54
-35                android:name="android.app.searchable"
-35-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:22:17-54
-36                android:resource="@xml/searchable" />
-36-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:23:17-51
-37        </activity>
-38        <activity android:name="com.example.myapplication.MainActivity" >
-38-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:26:9-33:20
-38-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:26:19-47
-39            <intent-filter>
-39-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:27:13-31:29
-40                <action android:name="android.intent.action.MAIN" />
-40-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:28:17-69
-40-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:28:25-66
-41
-42                <category android:name="android.intent.category.LAUNCHER" />
-42-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:30:17-77
-42-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:30:27-74
-43            </intent-filter>
-44        </activity>
-45
-46        <provider
-46-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:8:9-11:40
-47            android:name="com.squareup.picasso.PicassoProvider"
-47-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:9:13-64
-48            android:authorities="com.example.myapplication.com.squareup.picasso"
-48-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:10:13-72
-49            android:exported="false" />
-49-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:11:13-37
-50    </application>
-51
-52</manifest>
+27        <activity android:name="com.example.myapplication.ArticleActivity" />
+27-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:18:9-62
+27-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:18:19-50
+28        <activity
+28-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:19:9-30:20
+29            android:name="com.example.myapplication.SearchResultsActivity"
+29-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:20:13-50
+30            android:launchMode="singleTop" >
+30-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:21:13-43
+31            <intent-filter>
+31-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:22:13-24:29
+32                <action android:name="android.intent.action.SEARCH" />
+32-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:23:17-71
+32-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:23:25-68
+33            </intent-filter>
+34
+35            <meta-data
+35-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:26:13-29:54
+36                android:name="android.app.searchable"
+36-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:27:17-54
+37                android:resource="@xml/searchable" />
+37-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:29:17-51
+38        </activity>
+39        <activity android:name="com.example.myapplication.MainActivity" >
+39-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:31:9-38:20
+39-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:31:19-47
+40            <intent-filter>
+40-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:32:13-36:29
+41                <action android:name="android.intent.action.MAIN" />
+41-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:33:17-69
+41-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:33:25-66
+42
+43                <category android:name="android.intent.category.LAUNCHER" />
+43-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:35:17-77
+43-->C:\Users\foggy\Downloads\AndroidStudio Project\AndroidStudio Project\MyApplication\app\src\main\AndroidManifest.xml:35:27-74
+44            </intent-filter>
+45        </activity>
+46
+47        <provider
+47-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:8:9-11:40
+48            android:name="com.squareup.picasso.PicassoProvider"
+48-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:9:13-64
+49            android:authorities="com.example.myapplication.com.squareup.picasso"
+49-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:10:13-72
+50            android:exported="false" />
+50-->[com.squareup.picasso:picasso:2.71828] C:\Users\foggy\.gradle\caches\transforms-2\files-2.1\c1e8b77b745d4cbd8ed5d58d186363d3\jetified-picasso-2.71828\AndroidManifest.xml:11:13-37
+51    </application>
+52
+53</manifest>

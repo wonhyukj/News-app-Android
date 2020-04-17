@@ -25,6 +25,7 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/AppTheme" >
+        <activity android:name="com.example.myapplication.ArticleActivity" />
         <activity
             android:name="com.example.myapplication.SearchResultsActivity"
             android:launchMode="singleTop" >
