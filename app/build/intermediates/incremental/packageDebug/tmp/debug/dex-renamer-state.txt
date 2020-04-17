@@ -1,7 +1,0 @@
-#Thu Apr 16 17:28:52 PDT 2020
-base.0=C\:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes.dex
-path.1=classes.dex
-renamed.1=classes2.dex
-path.0=classes.dex
-renamed.0=classes.dex
-base.1=C\:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\out\\classes.dex
