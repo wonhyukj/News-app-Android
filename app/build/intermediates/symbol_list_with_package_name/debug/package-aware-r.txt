@@ -1482,6 +1482,7 @@ id accessibility_custom_action_6
 id accessibility_custom_action_7
 id accessibility_custom_action_8
 id accessibility_custom_action_9
+id acticleView
 id action_bar
 id action_bar_activity_content
 id action_bar_container
@@ -1505,6 +1506,13 @@ id add
 id alertTitle
 id all
 id always
+id articleContent
+id articleDate
+id articleImg
+id articleSource
+id articleTitle
+id articleURL
+id article_bookmark
 id async
 id auto
 id barrier
@@ -1626,6 +1634,7 @@ id mtrl_picker_text_input_range_end
 id mtrl_picker_text_input_range_start
 id mtrl_picker_title_text
 id multiply
+id name
 id nav_bookmarks
 id nav_headline
 id nav_home
@@ -1633,9 +1642,11 @@ id nav_trending
 id navigation_header_container
 id never
 id newsDate
+id newsID
 id newsImage
 id newsSource
 id newsTitle
+id newsURL
 id noScroll
 id none
 id normal
@@ -1658,6 +1669,7 @@ id progress_circular
 id progress_horizontal
 id radio
 id recycler_view
+id recycler_view2
 id right
 id right_icon
 id right_side
@@ -1818,8 +1830,12 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_article
 layout activity_main
 layout activity_search_results
+layout article_actionbar
+layout article_card
+layout bookmarks
 layout custom_dialog
 layout custom_list_layout
 layout design_bottom_navigation_item
@@ -1838,6 +1854,7 @@ layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout dialog
+layout headline_layout
 layout mtrl_alert_dialog
 layout mtrl_alert_dialog_actions
 layout mtrl_alert_dialog_title
@@ -1889,6 +1906,7 @@ layout text_view_with_line_height_from_layout
 layout text_view_with_line_height_from_style
 layout text_view_with_theme_line_height
 layout text_view_without_line_height
+layout trending_layout
 layout weather_layout
 menu bottom_navigation
 menu my_menu

@@ -40,7 +40,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
-                android:text="News Title"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/newsImage"
@@ -80,6 +79,19 @@
                 app:layout_constraintLeft_toRightOf="@id/newsDate"
                 app:layout_constraintStart_toEndOf="@id/newsDate" />
 
+            <TextView
+                android:id="@+id/newsURL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/newsID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

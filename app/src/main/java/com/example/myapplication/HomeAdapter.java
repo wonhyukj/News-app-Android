@@ -1,10 +1,13 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,11 +97,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of("America/Montreal"));
             ZonedDateTime timeGenerated = ZonedDateTime.parse(news.getTime());
             Duration d = Duration.between(timeNow, timeGenerated);
-
-            Log.i("WHAT NOW: ", timeNow.toString());
-            Log.i("WHAT Generated: ", timeGenerated.toString());
-            Log.i("WHAT DIFFERENCE: ", d.toString());
-
             String[] d_arr = d.toString().split("-");
             String timeReturn = "";
 
@@ -123,7 +121,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holders.newsTitle.setText(news.getTitle());
             holders.newsSource.setText(news.getSection());
             holders.newsDate.setText(timeReturn);
+            holders.newsURL.setText(news.getWebURL());
+            holders.newsID.setText(news.getId());
             Picasso.get().load(news.getImg()).fit().into(holders.newsImage);
+            Picasso.get().load(news.getImg()).fit().into(holders.newsBookmark);
         }
     }
 
@@ -133,9 +134,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
-        TextView newsTitle, newsSource, newsDate;
+        TextView newsTitle, newsSource, newsDate, newsID, newsURL;
 
-        ImageView newsImage, newsBookmark;
+        ImageView newsImage, newsBookmark, newsTwitter;
 
         NewsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -145,25 +146,51 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             newsSource = itemView.findViewById(R.id.newsSource);
             newsDate = itemView.findViewById(R.id.newsDate);
             newsBookmark = itemView.findViewById(R.id.bookmark);
+            newsTwitter = itemView.findViewById(R.id.twitter);
+            newsURL = itemView.findViewById(R.id.newsURL);
+            newsID = itemView.findViewById(R.id.newsID);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Do Something With this Click", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(v.getContext(), ArticleActivity.class);
+                    intent.putExtra("url", newsID.getText());
+                    v.getContext().startActivity(intent);
                 }
             });
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     final Dialog dialog = new Dialog(view.getContext());
+                    // Include dialog.xml file
                     dialog.setContentView(R.layout.dialog);
+                    // Set dialog title
                     dialog.setTitle("Custom Dialog");
-                    TextView text = dialog.findViewById(R.id.textDialog);
+
+                    // set values for custom dialog components - text, image and button
+                    ImageView imageView = (ImageView) dialog.findViewById(R.id.imageDialog);
+                    TextView text = (TextView) dialog.findViewById(R.id.textDialog);
                     text.setText(newsTitle.getText());
-                    ImageView image = dialog.findViewById(R.id.imageDialog);
+                    ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
+
                     Bitmap bitmap = ((BitmapDrawable) newsImage.getDrawable()).getBitmap();
+
                     image.setImageBitmap(bitmap);
+
+                    ImageView twitter = (ImageView) dialog.findViewById(R.id.twitter);
+                    twitter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet?text=Check out this Link: &url="
+                                    + newsURL.getText() + "&hashtags=CSCI571NewsSearch"));
+                            view.getContext().startActivity(intent);
+                        }
+                    });
+
                     dialog.show();
+
                     return false;
                 }
             });
@@ -174,6 +201,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView city, state, weather, temperature;
         CardView cardview;
         ConstraintLayout cardViewLayout;
+
         WeatherViewHolder(@NonNull View itemView) {
             super(itemView);
             city = itemView.findViewById(R.id.city);

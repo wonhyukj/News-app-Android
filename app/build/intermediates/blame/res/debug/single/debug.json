@@ -1,19 +1,31 @@
 [
     {
-        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_search_black_24dp.xml.flat",
-        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\ic_search_black_24dp.xml"
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
     },
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_text_view_layout.xml.flat",
         "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\text_view_layout.xml"
     },
     {
-        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_search_black_24dp.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\ic_search_black_24dp.xml"
     },
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\menu_my_menu.xml.flat",
         "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\menu\\my_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_article.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\activity_article.xml"
+    },
+    {
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_bookmarks.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\bookmarks.xml"
+    },
+    {
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_article_actionbar.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\article_actionbar.xml"
     },
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
@@ -22,6 +34,10 @@
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_snowy_weather.jpeg.flat",
         "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\snowy_weather.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_trending_layout.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\trending_layout.xml"
     },
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_cloudy_weather.jpg.flat",
@@ -116,6 +132,10 @@
         "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\thunder_weather.jpg"
     },
     {
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_headline_layout.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\headline_layout.xml"
+    },
+    {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_launcher_background.xml.flat",
         "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\ic_launcher_background.xml"
     },
@@ -126,6 +146,10 @@
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\drawable_clear_weather.jpg.flat",
         "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\drawable\\clear_weather.jpg"
+    },
+    {
+        "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\layout_article_card.xml.flat",
+        "source": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\src\\main\\res\\layout\\article_card.xml"
     },
     {
         "merged": "C:\\Users\\foggy\\Downloads\\AndroidStudio Project\\AndroidStudio Project\\MyApplication\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",

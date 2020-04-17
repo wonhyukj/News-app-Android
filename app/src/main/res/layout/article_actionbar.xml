@@ -1,0 +1,42 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    android:layout_width = "match_parent"
+    android:layout_height = "wrap_content"
+    android:gravity = "center_vertical"
+    android:padding = "10dp"
+    android:weightSum = "1">
+    <LinearLayout
+        android:layout_width = "0dp"
+        android:layout_height = "match_parent"
+        android:layout_weight = "0.7">
+        <ImageView
+            android:layout_width = "wrap_content"
+            android:layout_height = "match_parent"/>
+        <TextView
+            android:id = "@+id/name"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout_marginLeft = "10dp"
+            android:text = "Instagram"
+            android:textSize = "20sp"
+            android:textColor = "#000"
+            android:textStyle = "bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width = "0dp"
+        android:layout_height = "match_parent"
+        android:layout_weight = "0.3"
+        android:gravity = "end">
+        <ImageView
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:id="@+id/article_bookmark"
+            android:src = "@drawable/bookmark"
+            />
+        <ImageView
+            android:layout_width = "30dp"
+            android:layout_height = "30dp"
+            android:src="@drawable/bluetwitter"/>
+    </LinearLayout>
+</LinearLayout>
