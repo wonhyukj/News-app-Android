@@ -29,12 +29,14 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final Context context;
     private LayoutInflater inflater;
     private List<Object> combine;
     private static int TYPE_WEATHER = 1;
     private static int TYPE_NEWS = 2;
 
     HomeAdapter(Context ctx, List<Object> combine) {
+        this.context = ctx;
         this.inflater = LayoutInflater.from(ctx);
         this.combine = combine;
     }
@@ -48,7 +50,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         else
             return 999999;
     }
-
 
     @NonNull
     @Override
@@ -93,7 +94,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             NewsViewHolder holders = (NewsViewHolder) holder;
 
             News news = (News) combine.get(position);
-
+            // Change ZoneDateTime !!!!!
             ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of("America/Montreal"));
             ZonedDateTime timeGenerated = ZonedDateTime.parse(news.getTime());
             Duration d = Duration.between(timeNow, timeGenerated);
@@ -103,15 +104,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             for (String a : d_arr) {
                 String substring = a.substring(a.length() - 1);
                 if (substring.compareTo("H") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "h ago | ";
+                    timeReturn = a.substring(0, a.length() - 1) + "h ago";
                     System.out.println(a);
                     break;
                 } else if (substring.compareTo("M") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "m ago | ";
+                    timeReturn = a.substring(0, a.length() - 1) + "m ago";
                     System.out.println(a);
                     break;
                 } else if (substring.compareTo("S") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "s ago | ";
+                    timeReturn = (int) Float.parseFloat(a.substring(0, a.length() - 1)) + "s ago";
                     System.out.println(a);
                     break;
                 }
@@ -124,6 +125,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holders.newsURL.setText(news.getWebURL());
             holders.newsID.setText(news.getId());
             Picasso.get().load(news.getImg()).fit().into(holders.newsImage);
+            //BookMark
+            if (SharedPreference.getSavedObjectFromPreference(context, "storage", holders.newsID.getText().toString(), News.class) == null) {
+                holders.newsBookmark.setTag("noBookmark");
+            } else {
+                holders.newsBookmark.setTag("Bookmark");
+                holders.newsBookmark.setImageResource(R.drawable.ic_bookmark_24px);
+            }
+
         }
     }
 
@@ -135,7 +144,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView newsTitle, newsSource, newsDate, newsID, newsURL;
 
-        ImageView newsImage, newsBookmark, newsTwitter;
+        ImageView newsImage, newsBookmark, newsTwitter, dialog_bookmark;
+
 
         NewsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,12 +158,49 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             newsTwitter = itemView.findViewById(R.id.twitter);
             newsURL = itemView.findViewById(R.id.newsURL);
             newsID = itemView.findViewById(R.id.newsID);
+            dialog_bookmark = itemView.findViewById(R.id.dialog_bookmark);
 
+            newsBookmark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("CONTEXT: ", view.getContext().toString());
+                    if (newsBookmark.getTag().equals("noBookmark")) {
+                        newsBookmark.setImageResource(R.drawable.ic_bookmark_24px);
+                        newsBookmark.setTag("Bookmark");
+                        Log.i("NEWS ID: ", newsID.getText().toString());
+                        Toast.makeText(view.getContext(), "ID" + newsID.getText().toString(), Toast.LENGTH_LONG).show();
+                        News news = new News();
+
+                        news.setId(newsID.getText().toString());
+                        news.setImg(newsImage.getDrawable().toString());
+                        news.setSection(newsSource.getText().toString());
+                        news.setTime(newsDate.getText().toString());
+                        news.setTitle(newsTitle.getText().toString());
+                        news.setWebURL(newsURL.getText().toString());
+                        SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", news.getId(), news);
+                        Log.i("LOG ID: ", "ID" + SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString(), News.class));
+
+                    } else {
+                        newsBookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
+                        newsBookmark.setTag("noBookmark");
+                        SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString());
+//                        HomeAdapter.context = view.getContext();
+                        Log.i("LOG ID: ", "ID" + SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString(), News.class));
+                    }
+                }
+            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ArticleActivity.class);
                     intent.putExtra("url", newsID.getText());
+
+                    intent.putExtra("newsImage", newsImage.getDrawable().toString());
+                    intent.putExtra("newsSource", newsSource.getText());
+                    intent.putExtra("newsDate", newsDate.getText());
+                    intent.putExtra("newsTitle", newsTitle.getText());
+                    intent.putExtra("newsURL", newsURL.getText());
+
                     v.getContext().startActivity(intent);
                 }
             });
@@ -161,7 +208,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     final Dialog dialog = new Dialog(view.getContext());
                     // Include dialog.xml file
                     dialog.setContentView(R.layout.dialog);
@@ -169,16 +215,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     dialog.setTitle("Custom Dialog");
 
                     // set values for custom dialog components - text, image and button
-                    ImageView imageView = (ImageView) dialog.findViewById(R.id.imageDialog);
-                    TextView text = (TextView) dialog.findViewById(R.id.textDialog);
+                    TextView text = dialog.findViewById(R.id.textDialog);
                     text.setText(newsTitle.getText());
-                    ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
+                    ImageView image = dialog.findViewById(R.id.imageDialog);
 
                     Bitmap bitmap = ((BitmapDrawable) newsImage.getDrawable()).getBitmap();
 
                     image.setImageBitmap(bitmap);
 
-                    ImageView twitter = (ImageView) dialog.findViewById(R.id.twitter);
+                    ImageView twitter = dialog.findViewById(R.id.twitter);
                     twitter.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -188,6 +233,41 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     });
 
+                    final ImageView dialog_Bookmark = dialog.findViewById(R.id.dialog_bookmark);
+
+                    if (SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString(), News.class) == null) {
+                        dialog_Bookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
+                    } else {
+                        dialog_Bookmark.setImageResource(R.drawable.ic_bookmark_24px);
+                    }
+
+                    dialog_Bookmark.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (newsBookmark.getTag().equals("noBookmark")) {
+                                News news = new News();
+
+                                news.setId(newsID.getText().toString());
+                                news.setImg(newsImage.getDrawable().toString());
+                                news.setSection(newsSource.getText().toString());
+                                news.setTime(newsDate.getText().toString());
+                                news.setTitle(newsTitle.getText().toString());
+                                news.setWebURL(newsURL.getText().toString());
+
+                                dialog_Bookmark.setImageResource(R.drawable.ic_bookmark_24px);
+                                newsBookmark.setImageResource(R.drawable.ic_bookmark_24px);
+                                SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", newsID.getText().toString(), news);
+                                newsBookmark.setTag("Bookmark");
+
+                            } else {
+                                dialog_Bookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
+                                newsBookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
+                                SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString());
+                                newsBookmark.setTag("noBookmark");
+                            }
+
+                        }
+                    });
                     dialog.show();
 
                     return false;

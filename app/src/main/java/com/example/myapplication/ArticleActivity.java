@@ -1,16 +1,17 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class ArticleActivity extends AppCompatActivity {
 
-    ImageView img;
+    ImageView img, twitter;
     private final String JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/article?id=";
     String queryURL;
     List<DetailArticle> detailArticles;
@@ -43,37 +44,67 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         detailArticles = new ArrayList<>();
-
-        Bundle bundle = getIntent().getExtras();
+        final Bundle bundle = getIntent().getExtras();
         // Show Back button
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.article_actionbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView = findViewById(R.id.recycler_view2);
-        extractNews();
-        layoutManager = new LinearLayoutManager(this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        twitter = findViewById(R.id.article_twitter);
+        recyclerView = findViewById(R.id.recycler_view2);
+        layoutManager = new LinearLayoutManager(this);
 
         View view = getSupportActionBar().getCustomView();
         // On Click Listener for Twitter and bookmark
-
-//        TextView name = view.findViewById(R.id.name);
-//        name.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "You have clicked tittle", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
 
         if (bundle.getString("url") != null) {
             queryURL = JSON_URL + bundle.getString("url");
             Log.i("Link: ", queryURL);
 
-
             Toast.makeText(this, queryURL, Toast.LENGTH_SHORT).show();
+
+            // Change Bookmark if exist
+            img = findViewById(R.id.article_bookmark);
+
+            if (SharedPreference.getSavedObjectFromPreference(this.getApplicationContext(), "storage", bundle.getString("url"), News.class) == null) {
+                img.setImageResource(R.drawable.ic_bookmark_border_24px);
+            } else {
+                img.setImageResource(R.drawable.ic_bookmark_24px);
+            }
+
+            // Set Twitter Event
+            twitter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet?text=Check out this Link: &url="
+                            + bundle.getString("url") + "&hashtags=CSCI571NewsSearch"));
+                    view.getContext().startActivity(intent);
+                }
+            });
+
         }
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", bundle.getString("url"), News.class) == null) {
+                    img.setImageResource(R.drawable.ic_bookmark_24px);
+                    News news = new News();
+                    news.setId(bundle.getString("url"));
+                    news.setImg(bundle.getString("newsImage"));
+                    news.setSection(bundle.getString("newsSource"));
+                    news.setTime(bundle.getString("newsDate"));
+                    news.setTitle(bundle.getString("newsTitle"));
+                    news.setWebURL(bundle.getString("newsURL"));
+
+
+                    SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", bundle.getString("url"), news);
+                } else {
+                    img.setImageResource(R.drawable.ic_bookmark_border_24px);
+                    SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", bundle.getString("url"));
+                }
+            }
+        });
         extractNews();
 
     }
