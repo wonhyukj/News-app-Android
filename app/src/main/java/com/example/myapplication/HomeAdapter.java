@@ -103,15 +103,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             for (String a : d_arr) {
                 String substring = a.substring(a.length() - 1);
                 if (substring.compareTo("H") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "h ago | ";
+                    timeReturn = a.substring(0, a.length() - 1) + "h ago";
                     System.out.println(a);
                     break;
                 } else if (substring.compareTo("M") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "m ago | ";
+                    timeReturn = a.substring(0, a.length() - 1) + "m ago";
                     System.out.println(a);
                     break;
                 } else if (substring.compareTo("S") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "s ago | ";
+                    timeReturn = a.substring(0, a.length() - 1) + "s ago";
                     System.out.println(a);
                     break;
                 }
@@ -169,16 +169,16 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     dialog.setTitle("Custom Dialog");
 
                     // set values for custom dialog components - text, image and button
-                    ImageView imageView = (ImageView) dialog.findViewById(R.id.imageDialog);
-                    TextView text = (TextView) dialog.findViewById(R.id.textDialog);
+                    ImageView imageView = dialog.findViewById(R.id.imageDialog);
+                    TextView text = dialog.findViewById(R.id.textDialog);
                     text.setText(newsTitle.getText());
-                    ImageView image = (ImageView) dialog.findViewById(R.id.imageDialog);
+                    ImageView image = dialog.findViewById(R.id.imageDialog);
 
                     Bitmap bitmap = ((BitmapDrawable) newsImage.getDrawable()).getBitmap();
 
                     image.setImageBitmap(bitmap);
 
-                    ImageView twitter = (ImageView) dialog.findViewById(R.id.twitter);
+                    ImageView twitter = dialog.findViewById(R.id.twitter);
                     twitter.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

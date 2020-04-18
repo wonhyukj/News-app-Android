@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="ok">ok</string>
+    <string name="fetching_news">Fetching News</string>
+    <string name="news_source">News Source</string>
+    <string name="news_date">News Date</string>
+    <string name="news_title">News Title</string>
     <string-array name="android_versions">
         <item>Cupcake</item>
         <item>HoneyComb</item>
@@ -32,6 +36,5 @@
         <item>Cupcake</item>
         <item>HoneyComb</item>
         <item>Oreo</item>
-
     </string-array>
 </resources>
