@@ -112,7 +112,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     System.out.println(a);
                     break;
                 } else if (substring.compareTo("S") == 0) {
-                    timeReturn = Integer.parseInt(a.substring(0, a.length() - 1)) + "s ago";
+                    timeReturn = (int) Float.parseFloat(a.substring(0, a.length() - 1)) + "s ago";
                     System.out.println(a);
                     break;
                 }
