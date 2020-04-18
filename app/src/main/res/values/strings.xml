@@ -5,6 +5,12 @@
     <string name="news_source">News Source</string>
     <string name="news_date">News Date</string>
     <string name="news_title">News Title</string>
+    <string name="view_full_article">View Full Article</string>
+    <string name="this_is_random_text_from_article">this is random text from article</string>
+    <string name="world">world</string>
+    <string name="hello">hello</string>
+    <string name="todo">TODO</string>
+    <string name="instagram">Instagram</string>
     <string-array name="android_versions">
         <item>Cupcake</item>
         <item>HoneyComb</item>
