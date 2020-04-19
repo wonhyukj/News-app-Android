@@ -56,7 +56,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
         DetailArticle detailArticle = (DetailArticle) detailArticles.get(position);
 
-        Picasso.get().load(detailArticle.getArticleImg()).fit().into(((ArticleViewHolder) holder).articleImg);
+        if(detailArticle.getArticleImg().compareTo("") != 0)
+            Picasso.get().load(detailArticle.getArticleImg()).fit().into(((ArticleViewHolder) holder).articleImg);
+        else {
+            Picasso.get().load(R.drawable.bluetwitter).fit().into(((ArticleViewHolder) holder).articleImg);
+        }
+
 
         articleViewHolder.articleTitle.setText(detailArticle.getArticleTitle());
         articleViewHolder.articleSource.setText(detailArticle.getArticleSource());

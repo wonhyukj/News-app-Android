@@ -9,11 +9,13 @@ public class News {
     private String section;
     private String webURL;
     private String bookmark;
+    private String newsImgURL;
     public  News(){
 
     }
 
-    public News(String id, String img, String title ,String time, String section, String webURL, String bookmark){
+
+    public News(String id, String img, String title , String time, String section, String webURL, String bookmark, String newsImgURL){
         this.id = id;
         this.img = img;
         this.title = title;
@@ -21,6 +23,15 @@ public class News {
         this.section = section;
         this.webURL = webURL;
         this.bookmark = bookmark;
+        this.newsImgURL = newsImgURL;
+    }
+
+    public String getNewsImgURL() {
+        return newsImgURL;
+    }
+
+    public void setNewsImgURL(String newsImgURL) {
+        this.newsImgURL = newsImgURL;
     }
 
     public String getBookmark() {
@@ -30,8 +41,7 @@ public class News {
     public void setBookmark(String bookmark) {
         this.bookmark = bookmark;
     }
-
-
+    
     public String getId() {
         return id;
     }
@@ -79,5 +89,6 @@ public class News {
     public void setWebURL(String webURL) {
         this.webURL = webURL;
     }
+
 }
 

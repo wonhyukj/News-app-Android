@@ -180,6 +180,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                             newObj.setSection(newsObject.getString("section"));
                             newObj.setWebURL(newsObject.getString("webUrl"));
                             newObj.setImg(newsObject.getString("bigUrl"));
+                            newObj.setNewsImgURL(newsObject.getString("bigUrl"));
                             combines.add(newObj);
                         } catch (JSONException e) {
                             e.printStackTrace();

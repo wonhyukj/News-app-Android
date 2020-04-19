@@ -94,6 +94,12 @@
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
                 tools:ignore="MissingConstraints" />
+            <TextView
+                android:id="@+id/newsImgURL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/textView"

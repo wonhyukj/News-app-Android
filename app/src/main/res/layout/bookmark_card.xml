@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="20dp"
+    android:layout_width="170dp"
+    android:layout_height="200dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bookmarkView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/bookmarkImage"
+                android:layout_width="170dp"
+                android:layout_height="100dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/bluetwitter"
+                android:contentDescription="@string/todo" />
+
+            <LinearLayout
+                android:layout_width="170dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/bookmarkTitle"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/news_title"
+                    android:lines= "3"
+                    android:ems= "3"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/bookmarkDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/news_date"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/newsImage" />
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text=" | "
+                        android:textColor="@android:color/holo_purple"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/newsSource"
+                        app:layout_constraintStart_toEndOf="@+id/newsDate" />
+
+                <TextView
+                    android:id="@+id/bookmarkSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/news_source"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView" />
+                    <ImageView
+                        android:id="@+id/bookmark_Change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="#FFFFFF"
+                        android:baselineAlignBottom="true"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="center"
+                        app:layout_constraintStart_toEndOf="@id/bookmarkSource"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_bookmark_border_24px"
+                        tools:srcCompat="@drawable/ic_bookmark_border_24px"
+                        tools:visibility="visible" />
+                <TextView
+                    android:id="@+id/bookmarkURL"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/bookmarkID"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/bookmarkImgURL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        tools:ignore="MissingConstraints" />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

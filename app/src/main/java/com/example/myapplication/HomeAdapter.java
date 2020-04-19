@@ -124,6 +124,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holders.newsDate.setText(timeReturn);
             holders.newsURL.setText(news.getWebURL());
             holders.newsID.setText(news.getId());
+            holders.newsImgURL.setText(news.getImg());
             Picasso.get().load(news.getImg()).fit().into(holders.newsImage);
             //BookMark
             if (SharedPreference.getSavedObjectFromPreference(context, "storage", holders.newsID.getText().toString(), News.class) == null) {
@@ -142,7 +143,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
-        TextView newsTitle, newsSource, newsDate, newsID, newsURL;
+        TextView newsTitle, newsSource, newsDate, newsID, newsURL, newsImgURL;
 
         ImageView newsImage, newsBookmark, newsTwitter, dialog_bookmark;
 
@@ -159,6 +160,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             newsURL = itemView.findViewById(R.id.newsURL);
             newsID = itemView.findViewById(R.id.newsID);
             dialog_bookmark = itemView.findViewById(R.id.dialog_bookmark);
+            newsImgURL = itemView.findViewById(R.id.newsImgURL);
 
             newsBookmark.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,7 +174,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         News news = new News();
 
                         news.setId(newsID.getText().toString());
-                        news.setImg(newsImage.getDrawable().toString());
+                        news.setImg(newsImgURL.getText().toString());
                         news.setSection(newsSource.getText().toString());
                         news.setTime(newsDate.getText().toString());
                         news.setTitle(newsTitle.getText().toString());
@@ -195,7 +197,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     Intent intent = new Intent(v.getContext(), ArticleActivity.class);
                     intent.putExtra("url", newsID.getText());
 
-                    intent.putExtra("newsImage", newsImage.getDrawable().toString());
+                    intent.putExtra("newsImage", newsImgURL.getText().toString());
                     intent.putExtra("newsSource", newsSource.getText());
                     intent.putExtra("newsDate", newsDate.getText());
                     intent.putExtra("newsTitle", newsTitle.getText());
@@ -248,7 +250,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 News news = new News();
 
                                 news.setId(newsID.getText().toString());
-                                news.setImg(newsImage.getDrawable().toString());
+                                news.setImg(newsImgURL.getText().toString());
                                 news.setSection(newsSource.getText().toString());
                                 news.setTime(newsDate.getText().toString());
                                 news.setTitle(newsTitle.getText().toString());

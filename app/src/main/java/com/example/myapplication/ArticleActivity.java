@@ -137,8 +137,12 @@ public class ArticleActivity extends AppCompatActivity {
                     JSONObject element = elements.getJSONObject(0);
                     JSONArray assets = element.getJSONArray("assets");
                     int leng = assets.length();
-                    JSONObject last = assets.getJSONObject(leng - 1);
-                    String img = last.getString("file");
+                    JSONObject last = null;
+                    String img = "";
+                    if(leng != 0) {
+                        last = assets.getJSONObject(leng - 1);
+                        img = last.getString("file");
+                    }
 
                     String long_desc = jsonObject.getString("long_desc");
 
