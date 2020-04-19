@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_bookmarks:
-                        selectedFragment = HeadlineFragment.newInstance();
+                        selectedFragment = BookmarkFragment.newInstance();
                         Toast.makeText(MainActivity.this, "Bookmarks", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_headline:
