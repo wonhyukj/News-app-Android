@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabItem;
@@ -38,19 +37,9 @@ public class HeadlineFragment extends Fragment {
         TabItem science = (TabItem) view.findViewById(R.id.Science);
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
-//        PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager(), tabLayout.getTabCount()) {
-//            @Override
-//            public int getCount() {
-//                return 0;
-//            }
-//
-//            @Override
-//            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-//                return false;
-//            }
-//        };
-//        // tabLayout.getTabCount()
-//        viewPager.setAdapter(pagerAdapter);
+        PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager(), tabLayout.getTabCount());
+        // tabLayout.getTabCount()
+        viewPager.setAdapter(pagerAdapter);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
