@@ -60,6 +60,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         combines = new ArrayList<>();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Objects.requireNonNull(this.recyclerView.getAdapter()).notifyDataSetChanged();
+    }
+
     private void checkPermission() {
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -244,9 +250,14 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Object weather = combines.get(0);
+                Object weather = null;
+                if (combines.size() > 0) {
+                    weather = combines.get(0);
+                }
                 combines.clear();
-                combines.add(weather);
+                if (weather != null) {
+                    combines.add(weather);
+                }
                 extractNews();
                 swipeRefreshLayout.setRefreshing(false);
             }

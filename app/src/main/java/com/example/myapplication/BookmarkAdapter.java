@@ -1,33 +1,27 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -40,6 +34,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.inflater = LayoutInflater.from(ctx);
         this.news = news;
     }
+
     public interface OnItemClickListener {
         void onDeleteClick(int position);
     }
@@ -57,37 +52,45 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            BookmarkViewHolder holders = (BookmarkViewHolder) holder;
-            News news = null;
-            try {
-                news = (News) this.news.get(position);
-            } catch (Exception e) {
-                return ;
-            }
-            // Change ZoneDateTime !!!!!
+        BookmarkViewHolder holders = (BookmarkViewHolder) holder;
+        News news = null;
+        try {
+            news = this.news.get(position);
+        } catch (Exception e) {
+            return;
+        }
 
-            holders.bookmarkTitle.setText(news.getTitle());
-            holders.bookmarkSource.setText(news.getSection());
-            holders.bookmarkDate.setText(news.getTime());
-            holders.bookmarkURL.setText(news.getWebURL());
-            holders.bookmarkID.setText(news.getId());
-            holders.bookmarkImgURL.setText(news.getNewsImgURL());
+        holders.bookmarkTitle.setText(news.getTitle());
+        holders.bookmarkSource.setText(news.getSection());
+
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(news.getTime());
+        zonedDateTime = zonedDateTime.withZoneSameLocal(ZoneId.of("America/Los_Angeles"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM");
+        String formattedString = zonedDateTime.format(formatter);
+
+        holders.bookmarkDate.setText(formattedString);
+        holders.bookmarkURL.setText(news.getWebURL());
+        holders.bookmarkID.setText(news.getId());
+        holders.bookmarkImgURL.setText(news.getNewsImgURL());
+
+        if (news.getImg().equals("Guardians_hq.png")) {
+            Picasso.get().load(R.drawable.default_img).fit().into(holders.bookmarkImage);
+        } else {
             Picasso.get().load(news.getImg()).fit().into(holders.bookmarkImage);
+        }
 
-
-
-            //BookMark
-            if (SharedPreference.getSavedObjectFromPreference(context, "storage", holders.bookmarkID.getText().toString(), News.class) == null) {
-                holders.bookmark_Change.setTag("noBookmark");
-            } else {
-                holders.bookmark_Change.setTag("Bookmark");
-                holders.bookmark_Change.setImageResource(R.drawable.ic_bookmark_24px);
-            }
+        //BookMark
+        if (SharedPreference.getSavedObjectFromPreference(context, "storage", holders.bookmarkID.getText().toString(), News.class) == null) {
+            holders.bookmark_Change.setTag("noBookmark");
+        } else {
+            holders.bookmark_Change.setTag("Bookmark");
+            holders.bookmark_Change.setImageResource(R.drawable.ic_bookmark_24px);
+        }
     }
 
     @Override
     public int getItemCount() {
-        if(this.news == null)
+        if (this.news == null)
             return 0;
         Log.i("NEWS COUNT", String.valueOf(this.news.size()));
         return this.news.size();
@@ -116,14 +119,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View view) {
                     Log.i("CONTEXT: ", view.getContext().toString());
-                        bookmark_Change.setImageResource(R.drawable.ic_bookmark_border_24px);
-                        bookmark_Change.setTag("noBookmark");
-                        SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", bookmarkID.getText().toString());
-                        news.remove(news.get(getAdapterPosition()));
-                        notifyItemRemoved(getAdapterPosition());
-                        notifyItemRangeChanged(getAdapterPosition(), news.size());
+                    bookmark_Change.setImageResource(R.drawable.ic_bookmark_border_24px);
+                    bookmark_Change.setTag("noBookmark");
+                    SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", bookmarkID.getText().toString());
+                    news.remove(news.get(getAdapterPosition()));
+                    notifyItemRemoved(getAdapterPosition());
+                    notifyItemRangeChanged(getAdapterPosition(), news.size());
 
-                        Log.i("LOG ID: ", "ID" + SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", bookmarkID.getText().toString(), News.class));
+                    Log.i("LOG ID: ", "ID" + SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", bookmarkID.getText().toString(), News.class));
 
                 }
             });
