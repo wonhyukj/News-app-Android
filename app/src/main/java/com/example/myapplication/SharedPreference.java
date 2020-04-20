@@ -7,7 +7,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class SharedPreference {
@@ -30,6 +29,7 @@ public class SharedPreference {
         }
         return null;
     }
+
     public static int getCount(Context context, String preferenceFileName) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
         return sharedPreferences.getAll().size();
@@ -40,14 +40,14 @@ public class SharedPreference {
         ArrayList<News> news = new ArrayList<News>();
 
         int size = getCount(context, preferenceFileName);
-        if(size == 0) {
-            Log.i("No Result","");
+        if (size == 0) {
+            Log.i("No Result", "");
             return null;
         } else {
 
-            Map<String,?> keys = sharedPreferences.getAll();
+            Map<String, ?> keys = sharedPreferences.getAll();
 
-            for(Map.Entry<String,?> entry : keys.entrySet()){
+            for (Map.Entry<String, ?> entry : keys.entrySet()) {
                 final Gson gson = new Gson();
                 news.add(gson.fromJson(sharedPreferences.getString(entry.getKey(), ""), News.class));
             }

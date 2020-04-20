@@ -52,7 +52,7 @@ public class ArticleActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         twitter = findViewById(R.id.article_twitter);
-        recyclerView = findViewById(R.id.recycler_view2);
+        recyclerView = findViewById(R.id.recycler_article);
         layoutManager = new LinearLayoutManager(this);
 
         View view = getSupportActionBar().getCustomView();
@@ -93,11 +93,9 @@ public class ArticleActivity extends AppCompatActivity {
                     news.setId(bundle.getString("url"));
                     news.setImg(bundle.getString("newsImage"));
                     news.setSection(bundle.getString("newsSource"));
-                    news.setTime(bundle.getString("newsDate"));
+                    news.setTime(bundle.getString("newsTime"));
                     news.setTitle(bundle.getString("newsTitle"));
                     news.setWebURL(bundle.getString("newsURL"));
-
-
                     SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", bundle.getString("url"), news);
                 } else {
                     img.setImageResource(R.drawable.ic_bookmark_border_24px);
@@ -139,7 +137,7 @@ public class ArticleActivity extends AppCompatActivity {
                     int leng = assets.length();
                     JSONObject last = null;
                     String img = "";
-                    if(leng != 0) {
+                    if (leng != 0) {
                         last = assets.getJSONObject(leng - 1);
                         img = last.getString("file");
                     }
@@ -161,10 +159,7 @@ public class ArticleActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-
                 articleAdapter = new ArticleAdapter(getApplicationContext(), detailArticles);
                 recyclerView.setAdapter(articleAdapter);
             }

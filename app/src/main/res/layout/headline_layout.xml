@@ -13,6 +13,7 @@
         android:layout_gravity="center_horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tabTextColor="@color/colorPrimary"
         app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem

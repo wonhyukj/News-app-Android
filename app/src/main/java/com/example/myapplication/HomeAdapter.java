@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -94,39 +93,28 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             NewsViewHolder holders = (NewsViewHolder) holder;
 
             News news = (News) combine.get(position);
-            // Change ZoneDateTime !!!!!
-            ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of("America/Montreal"));
+            ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of("America/Los_Angeles"));
             ZonedDateTime timeGenerated = ZonedDateTime.parse(news.getTime());
             Duration d = Duration.between(timeNow, timeGenerated);
-            String[] d_arr = d.toString().split("-");
+            long seconds = d.getSeconds();
+            long absSeconds = Math.abs(seconds);
             String timeReturn = "";
-
-            for (String a : d_arr) {
-                String substring = a.substring(a.length() - 1);
-                if (substring.compareTo("H") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "h ago";
-                    System.out.println(a);
-                    break;
-                } else if (substring.compareTo("M") == 0) {
-                    timeReturn = a.substring(0, a.length() - 1) + "m ago";
-                    System.out.println(a);
-                    break;
-                } else if (substring.compareTo("S") == 0) {
-                    timeReturn = (int) Float.parseFloat(a.substring(0, a.length() - 1)) + "s ago";
-                    System.out.println(a);
-                    break;
-                }
+            if (absSeconds / 3600 > 0) {
+                timeReturn = (absSeconds / 3600) + "h ago";
+            } else if ((absSeconds % 3600) / 60 > 0) {
+                timeReturn = ((absSeconds % 3600) / 60) + "m ago";
+            } else {
+                timeReturn = (absSeconds % 60) + "s ago";
             }
 
             Log.i("TIMERETURN: ", timeReturn);
             holders.newsTitle.setText(news.getTitle());
             holders.newsSource.setText(news.getSection());
             holders.newsDate.setText(timeReturn);
+            holders.newsTime.setText(news.getTime());
             holders.newsURL.setText(news.getWebURL());
             holders.newsID.setText(news.getId());
             holders.newsImgURL.setText(news.getImg());
-
-
             Picasso.get().load(news.getImg()).fit().into(holders.newsImage);
             //BookMark
             if (SharedPreference.getSavedObjectFromPreference(context, "storage", holders.newsID.getText().toString(), News.class) == null) {
@@ -145,14 +133,16 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
-        TextView newsTitle, newsSource, newsDate, newsID, newsURL, newsImgURL;
+        TextView newsTitle, newsSource, newsDate, newsID, newsURL, newsImgURL, newsTime;
 
         ImageView newsImage, newsBookmark, newsTwitter, dialog_bookmark;
 
+        Intent intent;
 
         NewsViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            newsTime = itemView.findViewById(R.id.newsTime);
             newsImage = itemView.findViewById(R.id.newsImage);
             newsTitle = itemView.findViewById(R.id.newsTitle);
             newsSource = itemView.findViewById(R.id.newsSource);
@@ -178,7 +168,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         news.setId(newsID.getText().toString());
                         news.setImg(newsImgURL.getText().toString());
                         news.setSection(newsSource.getText().toString());
-                        news.setTime(newsDate.getText().toString());
+                        news.setTime(newsTime.getText().toString());
                         news.setTitle(newsTitle.getText().toString());
                         news.setWebURL(newsURL.getText().toString());
                         SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", news.getId(), news);
@@ -196,15 +186,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ArticleActivity.class);
+                    intent = new Intent(v.getContext(), ArticleActivity.class);
                     intent.putExtra("url", newsID.getText());
-
                     intent.putExtra("newsImage", newsImgURL.getText().toString());
                     intent.putExtra("newsSource", newsSource.getText());
                     intent.putExtra("newsDate", newsDate.getText());
+                    intent.putExtra("newsTime", newsTime.getText());
                     intent.putExtra("newsTitle", newsTitle.getText());
                     intent.putExtra("newsURL", newsURL.getText());
-
                     v.getContext().startActivity(intent);
                 }
             });
@@ -254,7 +243,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 news.setId(newsID.getText().toString());
                                 news.setImg(newsImgURL.getText().toString());
                                 news.setSection(newsSource.getText().toString());
-                                news.setTime(newsDate.getText().toString());
+                                news.setTime(newsTime.getText().toString());
                                 news.setTitle(newsTitle.getText().toString());
                                 news.setWebURL(newsURL.getText().toString());
 
