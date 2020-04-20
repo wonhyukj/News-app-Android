@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,7 +43,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
         DetailArticle detailArticle = detailArticles.get(position);
 
-        if (!detailArticle.getArticleImg().equals("Guardians_hq.png"))
+        if (!detailArticle.getArticleImg().isEmpty())
             Picasso.get().load(detailArticle.getArticleImg()).fit().into(((ArticleViewHolder) holder).articleImg);
         else {
             Picasso.get().load(R.drawable.default_img).fit().into(((ArticleViewHolder) holder).articleImg);
@@ -60,17 +61,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         articleViewHolder.articleURL.setText(detailArticle.getArticleURL());
     }
 
-
     @Override
     public int getItemCount() {
         return this.detailArticles.size();
     }
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder {
-        TextView articleTitle, articleSource, articleDate, articleContent, articleURL;
+        TextView articleTitle, articleContent, articleSource, articleDate, articleURL;
         ImageView articleImg;
         CardView cardview;
-
 
         public ArticleViewHolder(@NonNull View itemView) {
             super(itemView);

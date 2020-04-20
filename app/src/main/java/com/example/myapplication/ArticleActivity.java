@@ -3,9 +3,13 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -33,6 +37,7 @@ public class ArticleActivity extends AppCompatActivity {
     ImageView img, twitter;
     private final String JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/article?id=";
     String queryURL;
+    TextView actionbar_title;
     List<DetailArticle> detailArticles;
     BottomNavigationView bottomNavigation;
     private RecyclerView recyclerView;
@@ -49,10 +54,10 @@ public class ArticleActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.article_actionbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         twitter = findViewById(R.id.article_twitter);
         recyclerView = findViewById(R.id.recycler_article);
+        actionbar_title = findViewById(R.id.article_actionbar_title);
         layoutManager = new LinearLayoutManager(this);
 
         View view = getSupportActionBar().getCustomView();
@@ -131,6 +136,7 @@ public class ArticleActivity extends AppCompatActivity {
                     String webTitle = jsonObject.getString("webTitle");
                     String webUrl = jsonObject.getString("webUrl");
 
+                    actionbar_title.setText(webTitle);
                     JSONArray elements = jsonObject.getJSONObject("blocks").getJSONObject("main").getJSONArray("elements");
                     JSONObject element = elements.getJSONObject(0);
                     JSONArray assets = element.getJSONArray("assets");
@@ -143,19 +149,21 @@ public class ArticleActivity extends AppCompatActivity {
                     }
 
                     String long_desc = jsonObject.getString("long_desc");
-
+                    Spanned descHTML = Html.fromHtml(long_desc, Html.FROM_HTML_MODE_LEGACY);
                     detailArticle.setArticleTitle(webTitle);
                     detailArticle.setArticleSource(sectionName);
                     detailArticle.setArticleDate(webPublicationDate);
                     detailArticle.setArticleURL(webUrl);
                     detailArticle.setArticleImg(img);
-                    detailArticle.setArticleContent(long_desc);
+                    detailArticle.setArticleContent(descHTML);
 
                     Log.i("sectionName: ", sectionName);
                     Log.i("webPublicationDate: ", webPublicationDate);
                     Log.i("webTitle: ", webTitle);
                     Log.i("webUrl: ", webUrl);
                     detailArticles.add(detailArticle);
+                    findViewById(R.id.article_progress_text).setVisibility(View.GONE);
+                    findViewById(R.id.article_progress).setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

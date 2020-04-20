@@ -1,19 +1,21 @@
 package com.example.myapplication;
 
+import android.text.Spanned;
+
 public class DetailArticle {
     private String articleImg;
     private String articleTitle;
 
     private String articleSource;
     private String articleDate;
-    private String articleContent;
+    private Spanned articleContent;
     private String articleURL;
 
     public DetailArticle() {
 
     }
 
-    public DetailArticle(String articleImg, String articleTitle, String articleSource, String articleDate, String articleContent, String articleURL, String bookmark) {
+    public DetailArticle(String articleImg, String articleTitle, String articleSource, String articleDate, Spanned articleContent, String articleURL, String bookmark) {
         this.articleImg = articleImg;
         this.articleTitle = articleTitle;
         this.articleSource = articleSource;
@@ -54,11 +56,11 @@ public class DetailArticle {
         this.articleDate = articleDate;
     }
 
-    public String getArticleContent() {
+    public Spanned getArticleContent() {
         return articleContent;
     }
 
-    public void setArticleContent(String articleContent) {
+    public void setArticleContent(Spanned articleContent) {
         this.articleContent = articleContent;
     }
 

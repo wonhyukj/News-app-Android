@@ -10,27 +10,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <TextView
-        android:id="@+id/searchTerm"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:textSize="20dp"
-        android:text="Enter Search Term:" />
 
-    <EditText
-        android:id="@+id/trendQuery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:inputType="text"
-        android:imeOptions="actionSend"
-        android:text="CoronaVirus"/>
+        <TextView
+            android:id="@+id/searchTerm"
+            android:layout_width="380dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="Enter Search Term:"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/trendQuery"
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:maxLines="1"
+            android:text="CoronaVirus"
+            android:textColor="@color/grey" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart1"
 
             android:layout_width="match_parent"
-            android:layout_height="450dp" />
+            android:layout_height="400dp"
+            android:layout_marginTop="30dp" />
     </LinearLayout>
 
 </FrameLayout>

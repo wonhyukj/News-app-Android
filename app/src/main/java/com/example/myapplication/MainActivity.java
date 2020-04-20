@@ -33,8 +33,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String[] COUNTRIES = new String[] {"KOREA","JAPAN","USA","CHINA","INDIA","apple","kiwi","kia"};
+    private static final String[] COUNTRIES = new String[]{"KOREA", "JAPAN", "USA", "CHINA", "INDIA", "apple", "kiwi", "kia"};
     private ArrayAdapter<String> adapter;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -87,25 +88,16 @@ public class MainActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setIconifiedByDefault(true);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocusFromTouch();
 
-//        searchView.setOnSearchClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                searchView.setFocusable(true);
-//                searchView.requestFocusFromTouch();
-//
-//            }
-//        });
-//        searchView.setBackgroundColor(Color.GREEN);
-
-//
         int autoCompleteId = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         final AutoCompleteTextView searchAutoComplete = searchView.findViewById(autoCompleteId);
         searchAutoComplete.setTextColor(Color.BLACK);
 
         int imageViewId = searchView.getContext().getResources().getIdentifier("android:id/search_close_btn", null, null);
         final ImageView searchClose = searchView.findViewById(imageViewId);
-
 
         searchAutoComplete.setTextColor(Color.BLACK);
         SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -114,12 +106,9 @@ public class MainActivity extends AppCompatActivity {
                 builder.length() - 1, builder.length(), 0);
 
         searchAutoComplete.setHint(builder);
-        searchAutoComplete.setFocusable(true);
         searchAutoComplete.setFocusableInTouchMode(true);
-        searchAutoComplete.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(searchAutoComplete, InputMethodManager.SHOW_IMPLICIT);
-
         adapter = new ArrayAdapter<String>(this, R.layout.auto_suggest, COUNTRIES);
 
         searchView.setOnQueryTextListener(
@@ -137,41 +126,27 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onQueryTextChange(String newText) {
                         // Make Collapse
                         searchClose.setImageResource(R.drawable.ic_close_black_18dp);
-
                         searchClose.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 searchAutoComplete.setText("");
+                                searchView.requestFocusFromTouch();
                                 searchClose.setVisibility(View.INVISIBLE);
                             }
                         });
-
                         searchClose.setVisibility(View.VISIBLE);
-
-                        if(newText.length() >= 3) {
+                        if (newText.length() >= 3) {
                             searchAutoComplete.setAdapter(adapter);
                         } else {
                             searchAutoComplete.setAdapter(null);
                         }
-                        if(newText.length() == 0) {
+                        if (newText.length() == 0) {
                             searchClose.setVisibility(View.INVISIBLE);
                         }
                         return false;
                     }
                 }
         );
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.search:
-                        searchAutoComplete.requestFocus();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
 
         return true;
 

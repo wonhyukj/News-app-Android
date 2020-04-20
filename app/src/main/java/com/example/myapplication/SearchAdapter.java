@@ -55,7 +55,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         NewsViewHolder holders = (NewsViewHolder) holder;
 
-        News news = (News) this.news.get(position);
+        News news = this.news.get(position);
         ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of("America/Los_Angeles"));
         ZonedDateTime timeGenerated = ZonedDateTime.parse(news.getTime());
         timeGenerated = timeGenerated.withZoneSameLocal(ZoneId.of("America/Los_Angeles"));
@@ -64,7 +64,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         long seconds = d.getSeconds();
         long absSeconds = Math.abs(seconds);
         String timeReturn = "";
-        if (absSeconds / 3600 > 0) {
+        if ((absSeconds / 3600) > 24) {
+            timeReturn = (absSeconds / 3600) / 24 + "d ago";
+        } else if (absSeconds / 3600 > 0) {
             timeReturn = (absSeconds / 3600) + "h ago";
         } else if ((absSeconds % 3600) / 60 > 0) {
             timeReturn = ((absSeconds % 3600) / 60) + "m ago";

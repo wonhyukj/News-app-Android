@@ -217,7 +217,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 Log.i("RESPONSE WEATHER: ", response.toString());
                 try {
                     JSONArray jsonArray = response.getJSONArray("weather");
-                    String temperature = Integer.toString(response.getJSONObject("main").getInt("temp"));
+                    String temperature = String.valueOf(Math.round(response.getJSONObject("main").getDouble("temp")));
                     String weatherStr = jsonArray.getJSONObject(0).getString("main");
                     Weather weather = new Weather(cityName, stateName, weatherStr, temperature);
                     boolean isContain = false;

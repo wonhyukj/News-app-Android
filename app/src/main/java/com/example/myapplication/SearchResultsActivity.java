@@ -1,34 +1,19 @@
 package com.example.myapplication;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -46,10 +31,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
-public class SearchResultsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class SearchResultsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private String query;
     TextView searchTerm;
     private List<News> news;
@@ -57,7 +41,6 @@ public class SearchResultsActivity extends AppCompatActivity implements SwipeRef
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
     private TextView progressBarTextView;
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,10 +57,10 @@ public class SearchResultsActivity extends AppCompatActivity implements SwipeRef
         searchTerm = findViewById(R.id.searchKeyword);
         searchTerm.setText(query);
 
-        progressBar = findViewById(R.id.home_progress);
-        progressBarTextView = findViewById(R.id.home_textview);
+        progressBar = findViewById(R.id.search_progress);
+        progressBarTextView = findViewById(R.id.search_progress_text);
 
-        swipeRefreshLayout = findViewById(R.id.swipe_container);
+        swipeRefreshLayout = findViewById(R.id.search_swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
         progressBar.setVisibility(View.VISIBLE);
         progressBarTextView.setVisibility(View.VISIBLE);
@@ -91,6 +74,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SwipeRef
 
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -167,108 +151,3 @@ public class SearchResultsActivity extends AppCompatActivity implements SwipeRef
     }
 
 }
-
-
-//public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-//    private List<News> news;
-//    private RecyclerView recyclerView;
-//    private SwipeRefreshLayout swipeRefreshLayout;
-//    private ProgressBar progressBar;
-//    private TextView progressBarTextView;
-//    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        news = new ArrayList<>();
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        Objects.requireNonNull(this.recyclerView.getAdapter()).notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.home_layout, container, false);
-//        recyclerView = root.findViewById(R.id.recycler_view);
-//
-//        SearchAdapter searchAdapter = new SearchAdapter(getApplicationContext(), news);
-//        recyclerView.setAdapter(searchAdapter);
-//        progressBar = root.findViewById(R.id.home_progress);
-//        progressBarTextView = root.findViewById(R.id.home_textview);
-//
-//        swipeRefreshLayout = root.findViewById(R.id.swipe_container);
-//        swipeRefreshLayout.setOnRefreshListener(this);
-//
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//        recyclerView.setLayoutManager(layoutManager);
-//        progressBar.setVisibility(View.VISIBLE);
-//        progressBarTextView.setVisibility(View.VISIBLE);
-//        extractNews(query);
-//        return root;
-//    }
-//
-//    private Activity getMainActivity() {
-//        return Objects.requireNonNull(getActivity());
-//    }
-//
-//    private Context getApplicationContext() {
-//        return getMainActivity().getApplicationContext();
-//    }
-//
-//    private void extractNews(String query) {
-//        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-//        String JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Search?id=" + query;
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSON_URL, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONArray jsonArray = response.getJSONArray("temp");
-//                    for (int i = 0; i < jsonArray.length(); i++) {
-//                        try {
-//                            JSONObject newsObject = jsonArray.getJSONObject(i);
-//                            Log.i("JSON OBJ ", newsObject.toString());
-//                            News newObj = new News();
-//                            newObj.setId(newsObject.getString("id"));
-//                            newObj.setTitle(newsObject.getString("webTitle"));
-//                            newObj.setTime(newsObject.getString("webPublicationDate"));
-//                            newObj.setSection(newsObject.getString("section"));
-//                            newObj.setWebURL(newsObject.getString("webUrl"));
-//                            newObj.setImg(newsObject.getString("bigUrl"));
-//                            newObj.setNewsImgURL(newsObject.getString("bigUrl"));
-//                            news.add(newObj);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    progressBar.setVisibility(View.GONE);
-//                    progressBarTextView.setVisibility(View.GONE);
-//                    Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("tag", "onErrorResponse: " + error.getMessage());
-//            }
-//        });
-//        queue.add(jsonObjectRequest);
-//    }
-//
-//
-//    @Override
-//    public void onRefresh() {
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                extractNews(query);
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
-//        }, 1500);
-//    }
-//}
-//
