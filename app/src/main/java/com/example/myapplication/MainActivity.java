@@ -1,13 +1,10 @@
 package com.example.myapplication;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -92,21 +89,21 @@ public class MainActivity extends AppCompatActivity {
 
         int imageViewId = searchView.getContext().getResources().getIdentifier("android:id/search_close_btn", null, null);
         final ImageView searchClose = searchView.findViewById(imageViewId);
+        final Context ctx = getApplicationContext();
         searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-
                         // Start new activity
-
-//                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
-//                        intent.putExtra("query", query);
-//                        getApplicationContext().startActivity(intent);
-                        return false;
+                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+                        intent.putExtra("query", query);
+                        startActivity(intent);
+                        return true;
                     }
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
+                        // Make Collapse
                         searchClose.setImageResource(R.drawable.ic_close_black_18dp);
                         if (newText.isEmpty()) {
                             searchClose.setVisibility(View.GONE);
@@ -117,10 +114,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        ComponentName componentName = new ComponentName(getApplicationContext(), SearchResultsActivity.class);
-        Log.i("SearchView", String.valueOf(searchView));
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
         return true;
     }
 

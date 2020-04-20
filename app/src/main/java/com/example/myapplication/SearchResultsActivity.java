@@ -1,36 +1,29 @@
 package com.example.myapplication;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.SearchManager;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
 public class SearchResultsActivity extends AppCompatActivity {
+    private String query;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handleIntent(getIntent());
+        query = getIntent().getStringExtra(SearchManager.QUERY);
     }
 
+    @Nullable
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-
+    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
     }
 
-    private void handleIntent(Intent intent) {
-        Log.i("actionSearch",Intent.ACTION_SEARCH);
-        Log.i("getAction",intent.getAction());
 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.i("query", query);
-            //use the query to search your data somehow
-        }
-    }
 }
