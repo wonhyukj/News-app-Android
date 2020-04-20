@@ -18,6 +18,7 @@
         <activity android:name=".ArticleActivity" />
         <activity
             android:name=".SearchResultsActivity"
+            android:parentActivityName=".MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
