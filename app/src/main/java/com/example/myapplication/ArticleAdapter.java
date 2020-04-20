@@ -42,7 +42,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
         DetailArticle detailArticle = detailArticles.get(position);
 
-        if (detailArticle.getArticleImg().compareTo("") != 0)
+        if (!detailArticle.getArticleImg().equals("Guardians_hq.png"))
             Picasso.get().load(detailArticle.getArticleImg()).fit().into(((ArticleViewHolder) holder).articleImg);
         else {
             Picasso.get().load(R.drawable.default_img).fit().into(((ArticleViewHolder) holder).articleImg);
