@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = HeadlineFragment.newInstance();
                         break;
                     case R.id.nav_trending:
-                        selectedFragment = HeadlineFragment.newInstance();
+                        selectedFragment = TrendingFragment.newInstance();
                         Toast.makeText(MainActivity.this, "Trending", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -88,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
+
+                        // Start new activity
+
+//                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+//                        intent.putExtra("query", query);
+//                        getApplicationContext().startActivity(intent);
                         return false;
                     }
 
