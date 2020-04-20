@@ -115,7 +115,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holders.newsURL.setText(news.getWebURL());
             holders.newsID.setText(news.getId());
             holders.newsImgURL.setText(news.getImg());
-            Picasso.get().load(news.getImg()).fit().into(holders.newsImage);
+            if (news.getImg().equals("Guardians_hq.png")) {
+                Picasso.get().load(R.drawable.default_img).fit().into(holders.newsImage);
+            } else {
+                Picasso.get().load(news.getImg()).fit().into(holders.newsImage);
+            }
             //BookMark
             if (SharedPreference.getSavedObjectFromPreference(context, "storage", holders.newsID.getText().toString(), News.class) == null) {
                 holders.newsBookmark.setTag("noBookmark");

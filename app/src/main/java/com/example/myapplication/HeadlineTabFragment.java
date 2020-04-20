@@ -55,8 +55,6 @@ public class HeadlineTabFragment extends Fragment implements SwipeRefreshLayout.
         news = new ArrayList<>();
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.home_layout, container, false);
@@ -91,15 +89,15 @@ public class HeadlineTabFragment extends Fragment implements SwipeRefreshLayout.
         String JSON_URL = null;
         if (this.mode == "World")
             JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_World";
-        else if(this.mode == "Business")
+        else if (this.mode == "Business")
             JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_Business";
-        else if(this.mode == "Politics")
+        else if (this.mode == "Politics")
             JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_Politics";
-        else if(this.mode == "Sports")
+        else if (this.mode == "Sports")
             JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_Sport";
-        else if(this.mode == "Technology")
+        else if (this.mode == "Technology")
             JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_Technology";
-        else if(this.mode == "Science")
+        else if (this.mode == "Science")
             JSON_URL = "http://nodeserverandroid-env.eba-cxvrpe5n.us-west-2.elasticbeanstalk.com/Guardian_Science";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSON_URL, null, new Response.Listener<JSONObject>() {
