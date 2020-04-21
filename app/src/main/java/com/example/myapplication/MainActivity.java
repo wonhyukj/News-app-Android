@@ -3,10 +3,15 @@ package com.example.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
+import android.text.Editable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
@@ -14,18 +19,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -41,25 +44,28 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    private static String[] suggestion;
-    private ArrayAdapter<String> adapter;
+    private static final int TRIGGER_AUTO_COMPLETE = 100;
+    private static final long AUTO_COMPLETE_DELAY = 300;
+    private Handler handler;
+    private AutoSuggestAdapter autoSuggestAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        suggestion= new String[100];
+        autoSuggestAdapter = new AutoSuggestAdapter(this, R.layout.auto_suggest);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        extractSuggestion("Trump");
         bottomNavigationView.setElevation(0);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -68,18 +74,15 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
                         selectedFragment = HomeFragment.newInstance();
-                        Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_bookmarks:
                         selectedFragment = BookmarkFragment.newInstance();
-                        Toast.makeText(MainActivity.this, "Bookmarks", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_headline:
                         selectedFragment = HeadlineFragment.newInstance();
                         break;
                     case R.id.nav_trending:
                         selectedFragment = TrendingFragment.newInstance();
-                        Toast.makeText(MainActivity.this, "Trending", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + item.getItemId());
@@ -94,27 +97,25 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frame_layout, HomeFragment.newInstance());
         transaction.commit();
     }
+
     private void extractSuggestion(String query) {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
         String JSON_URL = "https://api.cognitive.microsoft.com/bing/v7.0/suggestions?q=" + query;
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSON_URL, null, new Response.Listener<JSONObject>() {
-
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray suggestionGroups = response.getJSONArray("suggestionGroups");
-//                    JSONObject searchSuggestions = suggestionGroups.
-//                    JSONArray searchSuggestions = suggestionGroups.getJSONArray()
-                    Log.i("SuggestionGroups: ", suggestionGroups.toString());
                     JSONObject dummy = suggestionGroups.getJSONObject(0);
                     JSONArray searchSuggestions = dummy.getJSONArray("searchSuggestions");
-                    Log.i("searchSuggestions: ", searchSuggestions.toString());
-                    for(int i = 0; i < searchSuggestions.length(); i++) {
+                    List<String> suggestions = new ArrayList<>();
+                    for (int i = 0; i < searchSuggestions.length(); i++) {
+                        if (suggestions.size() > 5) break;
                         String query = searchSuggestions.getJSONObject(i).getString("query");
-                        suggestion[i] = query;
+                        suggestions.add(query);
                     }
+                    autoSuggestAdapter.setData(suggestions);
+                    autoSuggestAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -150,11 +151,52 @@ public class MainActivity extends AppCompatActivity {
 
         int autoCompleteId = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         final AutoCompleteTextView searchAutoComplete = searchView.findViewById(autoCompleteId);
-        searchAutoComplete.setTextColor(Color.BLACK);
+        searchAutoComplete.setAdapter(autoSuggestAdapter);
+        searchAutoComplete.setThreshold(2);
+        searchAutoComplete.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                searchAutoComplete.setText(autoSuggestAdapter.getObject(position));
+            }
+        });
+
+        searchAutoComplete.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                handler.removeMessages(TRIGGER_AUTO_COMPLETE);
+                handler.sendEmptyMessageDelayed(TRIGGER_AUTO_COMPLETE,
+                        AUTO_COMPLETE_DELAY);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == TRIGGER_AUTO_COMPLETE) {
+                    if (!TextUtils.isEmpty(searchAutoComplete.getText()) && searchAutoComplete.getText().length() > 2) {
+                        extractSuggestion(searchAutoComplete.getText().toString());
+                    }
+                }
+                return false;
+            }
+        });
+
 
         int imageViewId = searchView.getContext().getResources().getIdentifier("android:id/search_close_btn", null, null);
         final ImageView searchClose = searchView.findViewById(imageViewId);
-
+        searchClose.setImageResource(R.drawable.ic_close_black_18dp);
+        searchClose.setVisibility(View.GONE);
         searchAutoComplete.setTextColor(Color.BLACK);
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(" ");
@@ -163,11 +205,6 @@ public class MainActivity extends AppCompatActivity {
 
         searchAutoComplete.setHint(builder);
         searchAutoComplete.setFocusableInTouchMode(true);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(searchAutoComplete, InputMethodManager.SHOW_IMPLICIT);
-        adapter = new ArrayAdapter<String>(this, R.layout.auto_suggest, suggestion);
-        searchAutoComplete.setAdapter(adapter);
-
         searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
                     @Override
@@ -181,27 +218,10 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        // Make Collapse
-                        searchClose.setImageResource(R.drawable.ic_close_black_18dp);
-                        searchClose.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                searchAutoComplete.setText("");
-                                searchView.requestFocusFromTouch();
-                                searchClose.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                        searchClose.setVisibility(View.VISIBLE);
-                        if (newText.length() >= 3) {
-                            extractSuggestion(newText);
-                            Log.i("suggestion: ",suggestion.toString());
-//                            searchAutoComplete.getAdapter().notify();
-
+                        if (newText.length() > 0) {
+                            searchClose.setVisibility(View.VISIBLE);
                         } else {
-                            searchAutoComplete.setAdapter(null);
-                        }
-                        if (newText.length() == 0) {
-                            searchClose.setVisibility(View.INVISIBLE);
+                            searchClose.setVisibility(View.GONE);
                         }
                         return false;
                     }

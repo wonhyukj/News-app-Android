@@ -29,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 public class WorldFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -54,8 +53,6 @@ public class WorldFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         super.onCreate(savedInstanceState);
         news = new ArrayList<>();
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

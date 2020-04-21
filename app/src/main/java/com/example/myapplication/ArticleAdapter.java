@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +82,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             articleContent = itemView.findViewById(R.id.articleContent);
             articleURL = itemView.findViewById(R.id.articleURL);
             cardview = itemView.findViewById(R.id.cardView);
+
+            itemView.findViewById(R.id.article_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(articleURL.getText().toString()));
+                    view.getContext().startActivity(intent);
+                }
+            });
         }
     }
 }

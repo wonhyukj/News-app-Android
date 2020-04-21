@@ -67,8 +67,6 @@ public class ArticleActivity extends AppCompatActivity {
             queryURL = JSON_URL + bundle.getString("url");
             Log.i("Link: ", queryURL);
 
-            Toast.makeText(this, queryURL, Toast.LENGTH_SHORT).show();
-
             // Change Bookmark if exist
             img = findViewById(R.id.article_bookmark);
 
@@ -93,6 +91,7 @@ public class ArticleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", bundle.getString("url"), News.class) == null) {
+                    Toast.makeText(view.getContext(), "\"" + bundle.getString("newsTitle") + "\" was added to bookmarks", Toast.LENGTH_LONG).show();
                     img.setImageResource(R.drawable.ic_bookmark_24px);
                     News news = new News();
                     news.setId(bundle.getString("url"));
@@ -103,6 +102,7 @@ public class ArticleActivity extends AppCompatActivity {
                     news.setWebURL(bundle.getString("newsURL"));
                     SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", bundle.getString("url"), news);
                 } else {
+                    Toast.makeText(view.getContext(), "\"" + bundle.getString("newsTitle") + "\" was removed from bookmarks", Toast.LENGTH_LONG).show();
                     img.setImageResource(R.drawable.ic_bookmark_border_24px);
                     SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", bundle.getString("url"));
                 }

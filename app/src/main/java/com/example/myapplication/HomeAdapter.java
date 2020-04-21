@@ -166,8 +166,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     if (newsBookmark.getTag().equals("noBookmark")) {
                         newsBookmark.setImageResource(R.drawable.ic_bookmark_24px);
                         newsBookmark.setTag("Bookmark");
-                        Log.i("NEWS ID: ", newsID.getText().toString());
-                        Toast.makeText(view.getContext(), "ID" + newsID.getText().toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(view.getContext(), "\"" + newsTitle.getText().toString() + "\" was added to bookmarks", Toast.LENGTH_LONG).show();
                         News news = new News();
 
                         news.setId(newsID.getText().toString());
@@ -177,14 +176,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         news.setTitle(newsTitle.getText().toString());
                         news.setWebURL(newsURL.getText().toString());
                         SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", news.getId(), news);
-                        Log.i("LOG ID: ", "ID" + SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString(), News.class));
 
                     } else {
                         newsBookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
                         newsBookmark.setTag("noBookmark");
+                        Toast.makeText(view.getContext(), "\"" + newsTitle.getText().toString() + "\" was removed from bookmarks", Toast.LENGTH_LONG).show();
                         SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString());
-//                        HomeAdapter.context = view.getContext();
-                        Log.i("LOG ID: ", "ID" + SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString(), News.class));
                     }
                 }
             });
@@ -244,6 +241,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         public void onClick(View view) {
                             if (newsBookmark.getTag().equals("noBookmark")) {
                                 News news = new News();
+                                Toast.makeText(view.getContext(), "\"" + newsTitle.getText() + "\" was added to bookmarks", Toast.LENGTH_LONG).show();
 
                                 news.setId(newsID.getText().toString());
                                 news.setImg(newsImgURL.getText().toString());
@@ -258,6 +256,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 newsBookmark.setTag("Bookmark");
 
                             } else {
+                                Toast.makeText(view.getContext(), "\"" + newsTitle.getText() + "\" was removed from bookmarks", Toast.LENGTH_LONG).show();
                                 dialog_Bookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
                                 newsBookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
                                 SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", newsID.getText().toString());

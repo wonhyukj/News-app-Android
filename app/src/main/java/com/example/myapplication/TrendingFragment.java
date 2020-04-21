@@ -108,7 +108,7 @@ public class TrendingFragment extends Fragment implements View.OnKeyListener {
         l.setTextSize(16f);
         l.setTextColor(Color.BLACK);
 
-        String query = trendQuery.getText().toString();
+        String query = "CoronaVirus";
         extractTrend(query);
 
         trendQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {

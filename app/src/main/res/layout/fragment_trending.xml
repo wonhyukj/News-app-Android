@@ -26,10 +26,10 @@
             android:layout_width="380dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:hint="CoronaVirus"
             android:imeOptions="actionSend"
             android:inputType="text"
             android:maxLines="1"
-            android:text="CoronaVirus"
             android:textColor="@color/grey" />
 
         <com.github.mikephil.charting.charts.LineChart

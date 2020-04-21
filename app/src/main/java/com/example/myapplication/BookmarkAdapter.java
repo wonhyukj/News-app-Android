@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,11 +29,13 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final Context context;
     private LayoutInflater inflater;
     private List<News> news;
+    private TextView textView;
 
-    BookmarkAdapter(Context ctx, List<News> news) {
+    BookmarkAdapter(Context ctx, List<News> news, TextView textView) {
         this.context = ctx;
         this.inflater = LayoutInflater.from(ctx);
         this.news = news;
+        this.textView = textView;
     }
 
     public interface OnItemClickListener {
@@ -42,9 +45,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
         RecyclerView.ViewHolder viewHolder;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookmark_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bookmark_card, parent, false);
         viewHolder = new BookmarkViewHolder(view);
         return viewHolder;
     }
@@ -90,11 +92,17 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        if (this.news == null)
+        if (this.news == null) {
+            textView.setVisibility(View.VISIBLE);
             return 0;
-        Log.i("NEWS COUNT", String.valueOf(this.news.size()));
+        } else {
+            if (news.size() > 0) {
+                textView.setVisibility(View.GONE);
+            } else {
+                textView.setVisibility(View.VISIBLE);
+            }
+        }
         return this.news.size();
-
     }
 
     public class BookmarkViewHolder extends RecyclerView.ViewHolder {
@@ -118,16 +126,13 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             bookmark_Change.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("CONTEXT: ", view.getContext().toString());
+                    Toast.makeText(view.getContext(), "\"" + bookmarkTitle.getText() + "\" was removed from bookmarks", Toast.LENGTH_LONG).show();
                     bookmark_Change.setImageResource(R.drawable.ic_bookmark_border_24px);
                     bookmark_Change.setTag("noBookmark");
                     SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", bookmarkID.getText().toString());
                     news.remove(news.get(getAdapterPosition()));
                     notifyItemRemoved(getAdapterPosition());
                     notifyItemRangeChanged(getAdapterPosition(), news.size());
-
-                    Log.i("LOG ID: ", "ID" + SharedPreference.getSavedObjectFromPreference(view.getContext(), "storage", bookmarkID.getText().toString(), News.class));
-
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +140,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ArticleActivity.class);
                     intent.putExtra("url", bookmarkID.getText());
-
                     intent.putExtra("newsImage", bookmarkURL.getText().toString());
                     intent.putExtra("newsSource", bookmarkSource.getText());
                     intent.putExtra("newsDate", bookmarkDate.getText());
@@ -159,7 +163,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     text.setText(bookmarkTitle.getText());
                     ImageView image = dialog.findViewById(R.id.imageDialog);
 
-//                    StringToBitMap(bookmarkImage);
                     Bitmap bitmap = ((BitmapDrawable) bookmarkImage.getDrawable()).getBitmap();
 
                     image.setImageBitmap(bitmap);
@@ -187,6 +190,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         public void onClick(View view) {
                             if (bookmark_Change.getTag().equals("noBookmark")) {
                                 News news = new News();
+                                Toast.makeText(view.getContext(), "\"" + bookmarkTitle.getText() + "\" was added to bookmarks", Toast.LENGTH_LONG).show();
 
                                 news.setId(bookmarkID.getText().toString());
                                 news.setImg(bookmarkImgURL.getText().toString());
@@ -194,23 +198,20 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 news.setTime(bookmarkDate.getText().toString());
                                 news.setTitle(bookmarkTitle.getText().toString());
                                 news.setWebURL(bookmarkURL.getText().toString());
-
-
                                 dialog_Bookmark.setImageResource(R.drawable.ic_bookmark_24px);
                                 bookmark_Change.setImageResource(R.drawable.ic_bookmark_24px);
                                 SharedPreference.saveObjectToSharedPreference(view.getContext(), "storage", bookmarkID.getText().toString(), news);
                                 bookmark_Change.setTag("Bookmark");
 
                             } else {
+                                Toast.makeText(view.getContext(), "\"" + bookmarkTitle.getText() + "\" was removed from bookmarks", Toast.LENGTH_LONG).show();
                                 dialog_Bookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
                                 bookmark_Change.setImageResource(R.drawable.ic_bookmark_border_24px);
                                 SharedPreference.removeSavedObjectFromPreference(view.getContext(), "storage", bookmarkID.getText().toString());
                                 news.remove(news.get(getAdapterPosition()));
                                 notifyItemRemoved(getAdapterPosition());
                                 notifyItemRangeChanged(getAdapterPosition(), news.size());
-
                                 bookmark_Change.setTag("noBookmark");
-
                             }
 
                         }
