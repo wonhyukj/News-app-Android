@@ -81,7 +81,7 @@ public class ArticleActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/intent/tweet?text=Check out this Link: &url="
-                            + bundle.getString("url") + "&hashtags=CSCI571NewsSearch"));
+                            + bundle.getString("newsURL") + "&hashtags=CSCI571NewsSearch"));
                     view.getContext().startActivity(intent);
                 }
             });
