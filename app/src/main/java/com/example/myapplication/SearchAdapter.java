@@ -57,8 +57,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         News news = this.news.get(position);
         ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of("America/Los_Angeles"));
-        ZonedDateTime timeGenerated = ZonedDateTime.parse(news.getTime());
-        timeGenerated = timeGenerated.withZoneSameLocal(ZoneId.of("America/Los_Angeles"));
+        ZonedDateTime timeGenerated = ZonedDateTime.parse(news.getTime()).withZoneSameInstant(ZoneId.of("America/Los_Angeles"));
 
         Duration d = Duration.between(timeNow, timeGenerated);
         long seconds = d.getSeconds();

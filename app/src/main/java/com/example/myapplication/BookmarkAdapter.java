@@ -65,8 +65,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holders.bookmarkTitle.setText(news.getTitle());
         holders.bookmarkSource.setText(news.getSection());
 
-        ZonedDateTime zonedDateTime = ZonedDateTime.parse(news.getTime());
-        zonedDateTime = zonedDateTime.withZoneSameLocal(ZoneId.of("America/Los_Angeles"));
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(news.getTime()).withZoneSameInstant(ZoneId.of("America/Los_Angeles"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM");
         String formattedString = zonedDateTime.format(formatter);
 
