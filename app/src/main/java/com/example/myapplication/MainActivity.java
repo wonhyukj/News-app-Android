@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,24 +29,37 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String[] COUNTRIES = new String[]{"KOREA", "JAPAN", "USA", "CHINA", "INDIA", "apple", "kiwi", "kia"};
+    private static String[] suggestion;
     private ArrayAdapter<String> adapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        suggestion= new String[100];
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
+        extractSuggestion("Trump");
         bottomNavigationView.setElevation(0);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -80,6 +94,48 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frame_layout, HomeFragment.newInstance());
         transaction.commit();
     }
+    private void extractSuggestion(String query) {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        String JSON_URL = "https://api.cognitive.microsoft.com/bing/v7.0/suggestions?q=" + query;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSON_URL, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray suggestionGroups = response.getJSONArray("suggestionGroups");
+//                    JSONObject searchSuggestions = suggestionGroups.
+//                    JSONArray searchSuggestions = suggestionGroups.getJSONArray()
+                    Log.i("SuggestionGroups: ", suggestionGroups.toString());
+                    JSONObject dummy = suggestionGroups.getJSONObject(0);
+                    JSONArray searchSuggestions = dummy.getJSONArray("searchSuggestions");
+                    Log.i("searchSuggestions: ", searchSuggestions.toString());
+                    for(int i = 0; i < searchSuggestions.length(); i++) {
+                        String query = searchSuggestions.getJSONObject(i).getString("query");
+                        suggestion[i] = query;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("tag", "onErrorResponse: " + error.getMessage());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("Ocp-Apim-Subscription-Key", "07aa6645f303473694af78aeb1297917");
+
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
         searchAutoComplete.setFocusableInTouchMode(true);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(searchAutoComplete, InputMethodManager.SHOW_IMPLICIT);
-        adapter = new ArrayAdapter<String>(this, R.layout.auto_suggest, COUNTRIES);
+        adapter = new ArrayAdapter<String>(this, R.layout.auto_suggest, suggestion);
+        searchAutoComplete.setAdapter(adapter);
 
         searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
@@ -136,7 +193,10 @@ public class MainActivity extends AppCompatActivity {
                         });
                         searchClose.setVisibility(View.VISIBLE);
                         if (newText.length() >= 3) {
-                            searchAutoComplete.setAdapter(adapter);
+                            extractSuggestion(newText);
+                            Log.i("suggestion: ",suggestion.toString());
+//                            searchAutoComplete.getAdapter().notify();
+
                         } else {
                             searchAutoComplete.setAdapter(null);
                         }
@@ -147,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
 
         return true;
 
