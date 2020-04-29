@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,8 +20,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,13 +45,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LocationListener {
     private List<Object> combines;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
     private TextView progressBarTextView;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private LocationManager locationManager;
+    private String provider;
 
     static HomeFragment newInstance() {
         return new HomeFragment();
@@ -57,19 +62,37 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        provider = locationManager.getBestProvider(new Criteria(), true);
         combines = new ArrayList<>();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            provider = locationManager.getBestProvider(new Criteria(), true);
+            locationManager.requestLocationUpdates(provider, 400, 1, this);
+        }
         Objects.requireNonNull(this.recyclerView.getAdapter()).notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestLocationUpdates(provider, 400, 1, this);
+                }
+            }
+        }
     }
 
     private void checkPermission() {
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                new AlertDialog.Builder(getApplicationContext()).setTitle("Title").setMessage("Location Permission")
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+                alertDialogBuilder.setTitle("Title").setMessage("Location Permission")
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -78,7 +101,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             }
-                        }).create().show();
+                        }).create();
+                try {
+                    alertDialogBuilder.show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getMainActivity(),
@@ -123,39 +152,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         swipeRefreshLayout = root.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        checkPermission();
-        final double[] lat = {34.0266};
-        final double[] lng = {-118.2828};
-        final LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                lat[0] = location.getLatitude();
-                lng[0] = location.getLongitude();
-                addWeatherCard(lat[0], lng[0]);
-            }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 600, 50, locationListener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         progressBar.setVisibility(View.VISIBLE);
         progressBarTextView.setVisibility(View.VISIBLE);
         extractNews();
+        checkPermission();
         return root;
     }
 
@@ -262,5 +265,25 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 swipeRefreshLayout.setRefreshing(false);
             }
         }, 1500);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        addWeatherCard(location.getLatitude(), location.getLongitude());
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }
