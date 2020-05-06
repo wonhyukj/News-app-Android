@@ -84,6 +84,12 @@ public class HeadlineTabFragment extends Fragment implements SwipeRefreshLayout.
         return getMainActivity().getApplicationContext();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Objects.requireNonNull(this.recyclerView.getAdapter()).notifyDataSetChanged();
+    }
+
     private void extractNews() {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String JSON_URL = null;
@@ -124,6 +130,7 @@ public class HeadlineTabFragment extends Fragment implements SwipeRefreshLayout.
                     progressBar.setVisibility(View.GONE);
                     progressBarTextView.setVisibility(View.GONE);
                     Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

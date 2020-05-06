@@ -123,6 +123,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //BookMark
             if (SharedPreference.getSavedObjectFromPreference(context, "storage", holders.newsID.getText().toString(), News.class) == null) {
                 holders.newsBookmark.setTag("noBookmark");
+                holders.newsBookmark.setImageResource(R.drawable.ic_bookmark_border_24px);
             } else {
                 holders.newsBookmark.setTag("Bookmark");
                 holders.newsBookmark.setImageResource(R.drawable.ic_bookmark_24px);

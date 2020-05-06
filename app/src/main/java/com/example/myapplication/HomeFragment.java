@@ -75,6 +75,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
         Objects.requireNonNull(this.recyclerView.getAdapter()).notifyDataSetChanged();
+
+
     }
 
     @Override
@@ -89,7 +91,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void checkPermission() {
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getApplicationContext(),
+                                                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
                 alertDialogBuilder.setTitle("Title").setMessage("Location Permission")
