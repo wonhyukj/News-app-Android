@@ -6,8 +6,8 @@ Project repository of News Android App
 - Guardian, Google Trends and Open Weather APIs and Android SDK.
 - Third party libraries like Picasso, Glide and Volley
 
-# Demonstration
-![](Demo.gif)
+#### [Demo] (Click Image for the demonstration)
+#### [![Demo](https://github.com/wonhyukjang/News-app-React/blob/master/Demo.png)](https://www.youtube.com/watch?v=IowBaIi6fjE&t=5s)
 
 # High Level Description
 
